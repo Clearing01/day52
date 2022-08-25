@@ -11,9 +11,9 @@ public class FavDAO {
 	Connection conn;
 	PreparedStatement pstmt;
 	final String sql_selectOne ="SELECT * FROM FAV WHERE MID=? AND BID=?";
-	final String sql_insert ="INSERT INTO FAV(FID,MID,BID) VALUES((SELECT NVL(MAX(FID),0)+1 FROM BOARD),?,?)";
+	final String sql_insert ="INSERT INTO FAV(FID,MID,BID) VALUES((SELECT NVL(MAX(FID),0)+1 FROM FAV),?,?)";
 	final String sql_delete="DELETE FROM FAV WHERE FID=?";
-	final String sql_update="UPDATE FAV SET FAV=? WHERE BID=?";
+	final String sql_update="UPDATE FAV SET FAV=? WHERE MID=? AND BID=?";
 	
 	public FavVO selectOne(FavVO fvo) {
 		conn=JDBCUtil.connect();
@@ -80,7 +80,8 @@ public class FavDAO {
 			else {
 				pstmt.setInt(1, 1);
 			}
-			pstmt.setInt(2, fvo.getBid());
+			pstmt.setString(2, fvo.getMid());
+			pstmt.setInt(3, fvo.getBid());
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

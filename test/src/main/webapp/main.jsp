@@ -21,6 +21,8 @@
 				document.mypage.submit();
 		}
 	</script>
+	
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
 </head>
 <body>
@@ -92,6 +94,7 @@
 	<div id="footer">
 		회사소개 | 이용약관 | <strong>개인정보처리방침</strong> | 보호정책 | 고객센터 <strong>ⓒ Corp.</strong>
 	</div>
+
 
 
 </body>

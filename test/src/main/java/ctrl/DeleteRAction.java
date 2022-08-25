@@ -24,7 +24,7 @@ public class DeleteRAction implements Action {
 			throw new Exception("deleteR 오류");
 		}
 		
-		request.setAttribute("cnt", request.getAttribute("cnt"));
+		request.setAttribute("cnt", request.getParameter("cnt"));
 		
 		return forward;		
 	}

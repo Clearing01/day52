@@ -21,6 +21,7 @@ public class FavAction implements Action{
 		vo = dao.selectOne(vo);
 		if(vo != null) {
 			dao.update(vo);
+			System.out.println("로그: 좋아요 update");
 			forward = new ActionForward();
 			forward.setPath("main.do");
 			forward.setRedirect(false);
@@ -29,10 +30,14 @@ public class FavAction implements Action{
 			FavVO vo2 = new FavVO();
 			vo2.setMid(request.getParameter("mid"));
 			vo2.setBid(Integer.parseInt(request.getParameter("bid")));
+			System.out.println("로그: 좋아요 insert");
 			dao.insert(vo2);
+			forward = new ActionForward();
+			forward.setPath("main.do");
+			forward.setRedirect(false);
 		}
 		
-		request.setAttribute("cnt", request.getAttribute("cnt"));
+		request.setAttribute("cnt", request.getParameter("cnt"));
 		
 		return forward;
 	}

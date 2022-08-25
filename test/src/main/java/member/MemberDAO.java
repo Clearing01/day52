@@ -2,12 +2,12 @@ package member;
 
 import java.sql.Connection;
 
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import board.BoardVO;
 import util.JDBCUtil;
 
 public class MemberDAO {
@@ -19,10 +19,12 @@ public class MemberDAO {
 	final String sql_update = "UPDATE MEMBER SET MPW=?,MNAME=? WHERE MID=?";
 	final String sql_insert="INSERT INTO MEMBER VALUES(?,?,?)";
 	final String sql_delete="DELETE FROM MEMBER WHERE MID=? AND MPW=?";
-	
-	final String sql_bCnt="SELECT COUNT(*) AS BCNT FROM BOARD WHERE MID=?";
-	final String sql_rCnt="SELECT COUNT(*) AS RCNT FROM REPLY WHERE MID=?";
-	
+
+	final private String sql_checkId="SELECT * FROM MEMBER WHERE MID=?";
+
+	final String sql_bCnt="SELECT * FROM BOARD WHERE MID=?";
+	final String sql_rCnt="SELECT * FROM REPLY WHERE MID=?";
+
 	public ArrayList<MemberVO> selectAll(MemberVO mvo) { // 유지보수 용이
 		conn=JDBCUtil.connect();
 		ArrayList<MemberVO> datas = new ArrayList<MemberVO>();
@@ -43,7 +45,7 @@ public class MemberDAO {
 		}
 		return datas;
 	}
-	
+
 	public ArrayList<MemberVO> selectAll_F(MemberVO mvo) { // 유지보수 용이
 		conn=JDBCUtil.connect();
 		ArrayList<MemberVO> datas = new ArrayList<MemberVO>();
@@ -64,7 +66,7 @@ public class MemberDAO {
 		}
 		return datas;
 	}
-	
+
 	public MemberVO selectOne(MemberVO mvo) {
 		conn=JDBCUtil.connect();
 		try {
@@ -87,7 +89,7 @@ public class MemberDAO {
 		}
 		return null;
 	}
-	
+
 	public boolean update(MemberVO mvo) {
 		conn = JDBCUtil.connect();
 		try {
@@ -104,7 +106,7 @@ public class MemberDAO {
 		}
 		return true;
 	}
-	
+
 	public boolean insert(MemberVO mvo) {
 		conn=JDBCUtil.connect();
 		try {
@@ -121,7 +123,7 @@ public class MemberDAO {
 		}
 		return true;
 	}
-	
+
 	public boolean delete(MemberVO mvo) {
 		conn=JDBCUtil.connect();
 		try {
@@ -137,37 +139,47 @@ public class MemberDAO {
 		}
 		return true;
 	}
-	
+
+	public int checkId(MemberVO vo) {
+		conn = JDBCUtil.connect();
+		try {
+			pstmt = conn.prepareStatement(sql_checkId);
+			pstmt.setString(1, vo.getMid());
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()) {
+				return 0; // 아이디 중복 발생...
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return -1;
+		} finally {
+			JDBCUtil.disconnect(pstmt, conn);
+		}
+		return 1; // 아이디 중복 아님!!
+	}
+
 	public boolean deleteMSample(MemberVO mvo) { // 유지보수 용이
 		conn=JDBCUtil.connect();
 		try {
 			pstmt=conn.prepareStatement(sql_bCnt);
 			pstmt.setString(1, mvo.getMid());
 			ResultSet rs = pstmt.executeQuery();
-			
+
 			if(rs.next()) {			
-				int bcnt = rs.getInt("BCNT");
-			//	System.out.println(bcnt); 게시글 개수
-				if(bcnt>0) {
-					System.out.println("로그: 게시글 존재");
+				System.out.println("로그: 게시글 존재");
+				return false;
+			}
+			else {
+				pstmt=conn.prepareStatement(sql_rCnt);
+				pstmt.setString(1, mvo.getMid());
+				ResultSet rs2 = pstmt.executeQuery();
+				//		System.out.println(rs2); 
+				if(rs2.next()) {
+					System.out.println("로그: 댓글 존재");
 					return false;
 				}
-				else {
-					pstmt=conn.prepareStatement(sql_rCnt);
-					pstmt.setString(1, mvo.getMid());
-					ResultSet rs2 = pstmt.executeQuery();
-			//		System.out.println(rs2); 
-					if(rs2.next()) {
-						int rcnt = rs2.getInt("RCNT");
-			//			System.out.println(rcnt); 댓글 개수
-						if(rcnt>0) {
-							System.out.println("로그: 댓글 존재");
-							return false;
-						}
-						return true;
-					}
-				}
-			}
+				return true;
+			}							
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

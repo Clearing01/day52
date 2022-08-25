@@ -31,6 +31,8 @@ public class BoardDAO {
 	final String sql_deleteR="DELETE FROM REPLY WHERE RID=?";
 	final String sql_update="UPDATE BOARD SET FAVCNT=FAVCNT+1 WHERE BID=?";
 	
+	final String sql_favCnt="SELECT SUM(FAV) AS CNT FROM FAV WHERE BID=? AND FAV=1";
+	
 
 	
 	public ArrayList<BoardSet> selectAll(BoardVO bvo) { // 유지보수 용이
@@ -59,7 +61,20 @@ public class BoardDAO {
 				
 				BoardVO boardVO = new BoardVO();
 				boardVO.setBid(rs.getInt("BID"));
-				boardVO.setFavcnt(rs.getInt("FAVCNT"));
+				
+				pstmt=conn.prepareStatement(sql_favCnt);
+				pstmt.setInt(1, rs.getInt("BID"));
+				ResultSet rs3 = pstmt.executeQuery();
+				if(rs3.next()) {
+					int cnt = rs3.getInt("CNT");			
+		//			System.out.println("로그: 좋아요 "+cnt);
+					boardVO.setFavcnt(cnt);
+				}
+				else {
+		//			System.out.println("로그: 좋아요 0");
+					boardVO.setFavcnt(0);
+				}
+				
 				boardVO.setMid(rs.getString("MID"));
 				boardVO.setMsg(rs.getString("MSG"));
 				boardVO.setMname(rs.getString("MNAME"));

@@ -28,7 +28,7 @@ public class InsertRAction implements Action{
 			throw new Exception("insertR 오류");
 		}
 		
-		request.setAttribute("cnt", request.getAttribute("cnt"));
+		request.setAttribute("cnt", request.getParameter("cnt"));
 		
 		return forward;
 	}
