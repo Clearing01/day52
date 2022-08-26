@@ -14,10 +14,10 @@ public class MemberDAO {
 	Connection conn;
 	PreparedStatement pstmt;
 	final String sql_selectAll = "SELECT * FROM MEMBER";
-	final String sql_selectAll_F = "SELECT * FROM (SELECT * FROM MEMBER ORDER BY ROWNUM DESC) WHERE ROWNUM <=3";
+	final String sql_selectAll_F = "SELECT * FROM (SELECT * FROM MEMBER ORDER BY MPK DESC) WHERE ROWNUM <=3";
 	final String sql_selectOne="SELECT * FROM MEMBER WHERE MID=? AND MPW=?";
 	final String sql_update = "UPDATE MEMBER SET MPW=?,MNAME=? WHERE MID=?";
-	final String sql_insert="INSERT INTO MEMBER VALUES(?,?,?)";
+	final String sql_insert="INSERT INTO MEMBER VALUES(?,?,?,(SELECT NVL(MAX(MPK),0)+1 FROM MEMBER))";
 	final String sql_delete="DELETE FROM MEMBER WHERE MID=? AND MPW=?";
 
 	final private String sql_checkId="SELECT * FROM MEMBER WHERE MID=?";

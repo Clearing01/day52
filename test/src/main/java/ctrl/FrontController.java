@@ -146,14 +146,7 @@ public class FrontController extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
-		else if(command.equals("/search.do")) {
-			try {
-				forward = new SearchAction().execute(request, response);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+
 /*		
 		if(forward==null) {
 			forward= new ActionForward();

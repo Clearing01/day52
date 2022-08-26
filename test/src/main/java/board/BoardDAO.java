@@ -15,11 +15,15 @@ public class BoardDAO {
 //	final String sql_selectAll_B = "SELECT * FROM (SELECT * FROM BOARD ORDER BY BID DESC) WHERE ROWNUM <=?";
 	final String sql_selectAll_B = "SELECT * FROM (SELECT * FROM BOARD JOIN MEMBER ON BOARD.MID = MEMBER.MID"
 								  +" ORDER BY BID DESC) WHERE ROWNUM <=?";
-	final String sql_selectAll_B_M = "SELECT * FROM BOARD JOIN MEMBER ON BOARD.MID = MEMBER.MID"
-								    +" WHERE MEMBER.MID=? ORDER BY BID DESC";
-	final String sql_selectAll_B_N = "SELECT * FROM BOARD JOIN MEMBER ON BOARD.MID = MEMBER.MID"
-								    +" WHERE MNAME LIKE '%'||?||'%' ORDER BY BID DESC";
+	
+	final String sql_selectAll_B_M = "SELECT * FROM (SELECT * FROM BOARD JOIN MEMBER ON BOARD.MID = MEMBER.MID"
+								    +" WHERE MEMBER.MNAME=? ORDER BY BID DESC) WHERE ROWNUM <=?";
+	
+//	final String sql_selectAll_B_N = "SELECT * FROM (SELECT * FROM BOARD JOIN MEMBER ON BOARD.MID = MEMBER.MID"
+//								    +" WHERE MNAME LIKE '%'||?||'%' ORDER BY BID DESC) WHERE ROWNUM <=?";
+	
 	final String sql_selectAll_B_size= "SELECT * FROM BOARD";
+	final String sql_selectAll_B_M_size= "SELECT * FROM BOARD JOIN MEMBER ON BOARD.MID = MEMBER.MID WHERE MEMBER.MNAME=?";
 
 		// LIMIT 은 MySQL
 		// Oracle 은 ROWNUM 을 사용함 (※ SQL문 실행순서 유의!)
@@ -36,23 +40,28 @@ public class BoardDAO {
 
 	
 	public ArrayList<BoardSet> selectAll(BoardVO bvo) { // 유지보수 용이
-		if(bvo.getSearchCondition()==null) {
-			bvo.setSearchCondition("");
+//		if(bvo.getSearchCondition()==null) {
+//			bvo.setSearchCondition("");
+//		}
+		if(bvo.getSearchContent()==null) {
+			bvo.setSearchContent("");
 		}
 		conn=JDBCUtil.connect();
 		ArrayList<BoardSet> datas = new ArrayList<BoardSet>();
 		try {
-			if(bvo.getSearchCondition().equals("loginMember")) {
+//			if(bvo.getSearchCondition().equals("loginMember")) {
+//				pstmt=conn.prepareStatement(sql_selectAll_B_M);
+//				pstmt.setString(1, bvo.getSearchContent());
+//				pstmt.setInt(2, bvo.getCnt());
+//			}
+			if(bvo.getSearchContent().equals("")) {
+				pstmt=conn.prepareStatement(sql_selectAll_B);
+				pstmt.setInt(1, bvo.getCnt());
+			}
+			else {	
 				pstmt=conn.prepareStatement(sql_selectAll_B_M);
 				pstmt.setString(1, bvo.getSearchContent());
-			}
-			else if(bvo.getSearchCondition().equals("mname")) {
-				pstmt=conn.prepareStatement(sql_selectAll_B_N);
-				pstmt.setString(1, bvo.getSearchContent());
-			}
-			else {
-				pstmt=conn.prepareStatement(sql_selectAll_B);
-				pstmt.setInt(1, bvo.getCnt());				
+				pstmt.setInt(2, bvo.getCnt());
 			}
 			
 			ResultSet rs = pstmt.executeQuery();
@@ -115,8 +124,7 @@ public class BoardDAO {
 		conn=JDBCUtil.connect();
 		ArrayList<BoardVO> datas = new ArrayList<BoardVO>();
 		try {
-				pstmt=conn.prepareStatement(sql_selectAll_B_size);
-			
+			pstmt=conn.prepareStatement(sql_selectAll_B_size);
 			ResultSet rs = pstmt.executeQuery();
 			while(rs.next()) {
 				BoardVO boardVO = new BoardVO();
@@ -127,6 +135,32 @@ public class BoardDAO {
 				boardVO.setRcnt(rs.getInt("RCNT")); 
 				// rList.size()와 RCNT가 같아 변수를 추가하지 않아 서버비용을 줄일 수 있음
 			
+				datas.add(boardVO);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCUtil.disconnect(pstmt, conn);
+		}
+		return datas;
+	}
+	
+	public ArrayList<BoardVO> selectAll_B_M_size(BoardVO bvo) { // 유지보수 용이
+		conn=JDBCUtil.connect();
+		ArrayList<BoardVO> datas = new ArrayList<BoardVO>();
+		try {
+			pstmt=conn.prepareStatement(sql_selectAll_B_M_size);
+			pstmt.setString(1, bvo.getMname());
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				BoardVO boardVO = new BoardVO();
+				boardVO.setBid(rs.getInt("BID"));
+				boardVO.setFavcnt(rs.getInt("FAVCNT"));
+				boardVO.setMid(rs.getString("MID"));
+				boardVO.setMsg(rs.getString("MSG"));
+				boardVO.setRcnt(rs.getInt("RCNT")); 
+				// rList.size()와 RCNT가 같아 변수를 추가하지 않아 서버비용을 줄일 수 있음
+				
 				datas.add(boardVO);
 			}
 		} catch (SQLException e) {

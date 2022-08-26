@@ -15,20 +15,34 @@ public class MainAction implements Action{
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// request.setCharacterEncoding("UTF-8");
 		// response.setCharacterEncoding("UTF-8");
-		
+		ArrayList<BoardSet> datas;
 		BoardDAO dao=new BoardDAO();
 		BoardVO vo=new BoardVO();
+		String searchContent = request.getParameter("searchContent");
 		String paramCnt=request.getParameter("cnt");
+		
 		if(paramCnt==null || paramCnt.equals("")){
 			vo.setCnt(2);
 		}
 		else {
 			vo.setCnt(Integer.parseInt(paramCnt));
 		}
-		ArrayList<BoardSet> datas=dao.selectAll(vo);
-		request.setAttribute("datasSize", dao.selectAll_size(vo).size());
+		
+//		vo.setSearchCondition(request.getParameter("searchCondition"));
+		vo.setSearchContent(searchContent);
+		
+		if(searchContent==null || searchContent.equals("")) {
+			request.setAttribute("datasSize", dao.selectAll_size(vo).size());
+		}
+		else {
+			vo.setMname(searchContent);
+			request.setAttribute("datasSize", dao.selectAll_B_M_size(vo).size());
+		}
+		
+		datas=dao.selectAll(vo);
 		request.setAttribute("datas", datas);
 		request.setAttribute("cnt", vo.getCnt());
+		request.setAttribute("searchContent", request.getParameter("searchContent"));
 		
 		ActionForward forward=new ActionForward();
 		forward.setPath("/main.jsp");

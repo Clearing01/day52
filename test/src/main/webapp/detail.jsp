@@ -1,24 +1,27 @@
-<%@ tag language="java" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ attribute name="midCheck" %>
-<%@ attribute name="bid" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous">
 </script>
-<c:if test="${member.mid==midCheck}">
-	<a href="deleteB.do?bid=${bid}">[삭제]</a>
-</c:if>
-<c:if test="${member!=null}">
-	<a href="fav.do?mid=${member.mid}&bid=${bid}&cnt=${cnt}">&nbsp;♥</a>
-<!-- <div id="result" onclick="fav();">♡</div>  -->
-</c:if>
+</head>
+<body>
 
+<div id="result" onclick="fav();">♡</div>
+<hr>
+${member.mid}
+${param.bid}
+<hr>
 
+<a href="main.do">메인으로</a>
 
-<!-- 
 <script type="text/javascript">
 	function fav(){
 		var mid = '${member.mid}';
-		var bid = '${bid}';
+		var bid = '${param.bid}';
 		console.log('로그: fav');
 		$.ajax({
 			type: 'POST',
@@ -40,6 +43,7 @@
 			}
 		});
 	}
-</script>
- -->
+</script>	
 
+</body>
+</html>

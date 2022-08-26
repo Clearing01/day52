@@ -32,10 +32,12 @@ public class DeleteMAction implements Action{
 				forward.setRedirect(true);
 			}
 			else {
+				forward = new ActionForward();
+				forward.setPath("error/error.jsp");
+				forward.setRedirect(true);
 				throw new Exception("게시글 또는 댓글이 존재하여 삭제 불가");
 			}
 		}
-
 		return forward;
 	}
 }

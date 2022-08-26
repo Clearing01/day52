@@ -31,7 +31,7 @@
 		<h1>작은 티모</h1>
 
 		<div class="gnb">
-		
+			<!-- mypage로 제출 되는 id, pw -->
 			<form name="mypage" action=mypage.do method="post">
 				<input type="hidden" name="mid" value="${member.mid}">
 				<input type="hidden" name="mpw" value="">
@@ -44,7 +44,8 @@
 				</c:if>
 				<li><kim:login /></li>
 			</ul>
-			<form action="search.do">
+			<!-- 검색 기능 -->
+			<form action="main.do">
 				<input type="text" name="searchContent">
 				<select name="searchCondition">
 					<option value="mname">작성자</option>
@@ -65,7 +66,7 @@
 			<h2>글 목록보기</h2>
 			<c:forEach var="v" items="${datas}">
 				<c:set var="b" value="${v.boardVO}" />
-				<h3>[${b.mname}] ${b.msg} [ 좋아요 ${b.favcnt} | 댓글 ${b.rcnt} ] 
+				<h3>[${b.mname}] <a href="detail.jsp?bid=${b.bid}">${b.msg}</a> [ 좋아요 ${b.favcnt} | 댓글 ${b.rcnt} ] 
 					<kim:board midCheck="${b.mid}" bid="${b.bid}" />
 				</h3>
 								
@@ -82,20 +83,19 @@
 			</div>
 			</c:forEach>
 		</div>
+		${datasSize}
 		<c:if test="${cnt < datasSize}">
-			<a href="main.do?cnt=${cnt+2}">더보기&gt;&gt;</a>
+			<a href="main.do?cnt=${cnt+2}&searchContent=${searchContent}">더보기&gt;&gt;</a>
 		</c:if>
 		<h3>최근 가입한 친구</h3>
 		<c:forEach var="m" items="${datas2}">
-			[${m.mname}]
+			<a href="main.do?searchContent=${m.mname}">[${m.mname}]</a>
 		</c:forEach>
 	</div>
 		
 	<div id="footer">
 		회사소개 | 이용약관 | <strong>개인정보처리방침</strong> | 보호정책 | 고객센터 <strong>ⓒ Corp.</strong>
 	</div>
-
-
 
 </body>
 </html>

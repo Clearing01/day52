@@ -6,9 +6,9 @@
 	<c:when test="${member != null}">
 		<h1><a href="javascript:check()">${member.mname}</a>님, 반갑습니다!</h1>
 		<a href="logout.do">로그아웃</a>
-		<form action="search.do" method="post">
-			<input type="hidden" name="searchContent" value="${member.mid}">
-			<input type="hidden" name="searchCondition" value="loginMember">
+		<form action="main.do" method="post">
+			<input type="hidden" name="searchContent" value="${member.mname}">
+			<input type="hidden" name="searchCondition" value="mname">
 			<input type="submit" value="내 게시글 보기">
 		</form>
 	</c:when>
