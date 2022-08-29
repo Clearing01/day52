@@ -5,5 +5,5 @@
 <%@ attribute name="rid" %>
 
 <c:if test="${member.mid==midCheck}">
-<a href="deleteR.do?rid=${rid}&cnt=${cnt}">[삭제]</a>
+<a href="deleteR.do?rid=${rid}&cnt=${cnt}&searchContent=${searchContent}">[삭제]</a>
 </c:if>

@@ -8,7 +8,7 @@
 	<a href="deleteB.do?bid=${bid}">[삭제]</a>
 </c:if>
 <c:if test="${member!=null}">
-	<a href="fav.do?mid=${member.mid}&bid=${bid}&cnt=${cnt}">&nbsp;♥</a>
+	<a href="fav.do?mid=${member.mid}&bid=${bid}&cnt=${cnt}&searchContent=${searchContent}">&nbsp;♥</a>
 <!-- <div id="result" onclick="fav();">♡</div>  -->
 </c:if>
 

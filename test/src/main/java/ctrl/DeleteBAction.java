@@ -23,7 +23,6 @@ public class DeleteBAction implements Action{
 		else {
 			throw new Exception("deleteB 오류");
 		}
-		
 		return forward;
 	}
 }

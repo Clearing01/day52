@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-
 import util.JDBCUtil;
 
 public class BoardDAO {
@@ -49,11 +48,6 @@ public class BoardDAO {
 		conn=JDBCUtil.connect();
 		ArrayList<BoardSet> datas = new ArrayList<BoardSet>();
 		try {
-//			if(bvo.getSearchCondition().equals("loginMember")) {
-//				pstmt=conn.prepareStatement(sql_selectAll_B_M);
-//				pstmt.setString(1, bvo.getSearchContent());
-//				pstmt.setInt(2, bvo.getCnt());
-//			}
 			if(bvo.getSearchContent().equals("")) {
 				pstmt=conn.prepareStatement(sql_selectAll_B);
 				pstmt.setInt(1, bvo.getCnt());

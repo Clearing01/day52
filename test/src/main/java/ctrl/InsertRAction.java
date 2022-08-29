@@ -29,6 +29,7 @@ public class InsertRAction implements Action{
 		}
 		
 		request.setAttribute("cnt", request.getParameter("cnt"));
+		request.setAttribute("searchContent", request.getParameter("searchContent"));
 		
 		return forward;
 	}

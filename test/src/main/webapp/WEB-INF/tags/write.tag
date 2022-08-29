@@ -20,6 +20,7 @@
 			<form action="insertR.do" method="post">
 				<input type="hidden" name="mid" value="${member.mid}">
 				<input type="hidden" name="cnt" value="${cnt}">
+				<input type="hidden" name="searchContent" value="${searchContent}">
 				<input type="hidden" name="action" value="insertR">
 				<input type="hidden" name="bid" value="${bid}">
 				댓글: <input type="text" name="rmsg">
